@@ -1,4 +1,4 @@
-# social-club-front
+# social-club-front (Work in progress)
 
 ## Project setup
 ```
