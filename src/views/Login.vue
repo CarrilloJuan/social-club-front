@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height">
-    <v-row justify="center" align="center">
-      <v-col cols="12" sm="4" class="grey lighten-5">
+    <v-row justify="center" align="center" class="mx-auto">
+      <v-col cols="12" sm="6" md="4" class="grey lighten-5">
         <ValidationObserver ref="observer">
           <form>
             <v-row justify="center" align="center">
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { Auth } from "../firebase/firebase";
 import TheFooter from "@/components/TheFooter.vue";
 import { required, email } from "vee-validate/dist/rules";
 import {
@@ -82,13 +83,19 @@ export default {
   }),
 
   methods: {
+    clear() {
+      this.email = "";
+      this.password = "";
+      this.$refs.observer.reset();
+    },
     submit() {
       this.$refs.observer.validate();
-    },
-    clear() {
-      this.name = "";
-      this.email = "";
-      this.$refs.observer.reset();
+      Auth.signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          this.clear();
+          this.$router.push("/home");
+        })
+        .catch(err => console.log(err));
     }
   }
 };
